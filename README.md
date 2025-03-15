@@ -1,17 +1,17 @@
 # Projekt z kursu systemy operacyjne 2
 ## Opis
-**Aplikacja implementuje problem jedzących filozofów.
+Aplikacja implementuje problem jedzących filozofów.
 Problem ucztujących filozofów jest prezentacją problemu synchronizacji pracujących współbieżnie procesów.
 Pięciu filozofów siedzi przy stole i każdy wykonuje jedną z dwóch czynności – albo je, albo rozmyśla. Stół 
 jest okrągły, przed każdym z nich znajduje się miska ze spaghetti, a pomiędzy każdą sąsiadującą parą filozofów 
 leży widelec, a więc każda osoba ma przy sobie dwie sztuki – po swojej lewej i prawej stronie. Ponieważ jedzenie 
 potrawy jest trudne przy użyciu jednego widelca, zakłada się, że każdy filozof korzysta z dwóch. Dodatkowo nie ma 
-możliwości skorzystania z widelca, który nie znajduje się bezpośrednio przed daną osobą.**
+możliwości skorzystania z widelca, który nie znajduje się bezpośrednio przed daną osobą.
 
 **Źródło - *[Wikipedia](https://pl.wikipedia.org/wiki/Problem_ucztuj%C4%85cych_filozof%C3%B3w)***
 
 ## Sposób rozwiązania
-**Skorzystano z rozwiązania przy użyciu hierarchii zasobów.
+Skorzystano z rozwiązania przy użyciu hierarchii zasobów.
 W ten sposób kolejność dostępu do zasobów jest ustalona przez określony porządek. a ich zwalnianie następuje 
 w odwrotnej kolejności, oraz że dwa zasoby niepowiązane relacją porządku nie mogą zostać użyte przez jednego 
 filozofa w tym samym czasie.
@@ -20,7 +20,7 @@ jednostki (filozofowie) zawsze najpierw podnoszą widelec oznaczony niższym num
 oznaczony wyższym. Następnie, zwracając widelce, najpierw oddają widelec z wyższym numerem, a potem z niższym. 
 W tym wypadku, jeśli czterech filozofów jednocześnie podniesie swoje widelce z niższymi numerami, na stole 
 pozostanie widelec z najwyższym numerem, przez co piąty filozof nie będzie mógł podnieść żadnego. Ponadto tylko
-jeden filozof ma dostęp do widelca z najwyższym numerem, więc będzie on mógł jeść dwoma widelcami.**
+jeden filozof ma dostęp do widelca z najwyższym numerem, więc będzie on mógł jeść dwoma widelcami.
 
 **Źródło - *[Wikipedia - Rozwiązanie przy użyciu hierarchii zasobów](https://pl.wikipedia.org/wiki/Problem_ucztuj%C4%85cych_filozof%C3%B3w)***
 
