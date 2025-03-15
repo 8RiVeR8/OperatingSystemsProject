@@ -25,11 +25,11 @@ jeden filozof ma dostęp do widelca z najwyższym numerem, więc będzie on móg
 **Źródło - *[Wikipedia - Rozwiązanie przy użyciu hierarchii zasobów](https://pl.wikipedia.org/wiki/Problem_ucztuj%C4%85cych_filozof%C3%B3w)***
 
 ## Program
-**Program nie jest złożony. Składa się z jednej metody *philosopher* oraz funkji *main*.
+Program nie jest złożony. Składa się z jednej metody *philosopher* oraz funkji *main*.
 W funkcji *main* pobieramy ilość filozofów, która jest przekazywana jako argument przy uruchamianiu programu.
 Oprócz tego inicjalizujemy mutexy, i tworzymy wątki dla filozofów. Na końcu mutexy są niszczone.**
 **W funkcji *philosopher* jest dokonana implementacja samego problemu. To w tej metodzie występuje wypisanie 
-informacji, którzy filozofowie myślą, które widelce są pobierane oraz którzy filozfowie jedzą.**
+informacji, którzy filozofowie myślą, które widelce są pobierane oraz którzy filozfowie jedzą.
 
 ## Instrukcja uruchomienia projektu
 ### Aby uruchomić projekt należy konać następujące czynności:
