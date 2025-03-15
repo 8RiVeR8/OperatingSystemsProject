@@ -1,0 +1,12 @@
+name: cpplint
+on: [push]
+jobs:
+  cpplint:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - run: pip install cpplint
+      - run: cpplint --recursive .
