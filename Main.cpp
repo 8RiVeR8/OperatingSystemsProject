@@ -3,13 +3,12 @@
 #include <iostream>
 #include <thread>
 
-pthread_mutex_t waitForPrint = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t* waitForFork;
 
-void *test(void *arg) {
+void *philosopher(void *arg) {
     int id = *reinterpret_cast<int*>(arg);
-    pthread_mutex_lock(&waitForPrint);
     std::cout << "Filozof numer: " << id << " myśli\n";
-    pthread_mutex_unlock(&waitForPrint);
+
     std::this_thread::sleep_for(std::chrono::seconds(3));
     return nullptr;
 }
@@ -22,14 +21,21 @@ int main(int argc, const char * argv[]) {
 
     for (int i = 0; i < AMOUNT_OF_PHILOSOPHERS; ++i) {
         ids[i] = i;
-        pthread_create(&philosophersThread[i], nullptr, &test, &ids[i]);
+        pthread_create(&philosophersThread[i], nullptr, &philosopher, &ids[i]);
+    }
+
+    waitForFork = new pthread_mutex_t[AMOUNT_OF_PHILOSOPHERS];
+    for (int i = 0; i < AMOUNT_OF_PHILOSOPHERS; ++i) {
+        pthread_mutex_init(&waitForFork[i], nullptr);
     }
 
     for (int i = 0; i < AMOUNT_OF_PHILOSOPHERS; ++i) {
         pthread_join(philosophersThread[i], nullptr);
     }
 
-    pthread_mutex_destroy(&waitForPrint);
+    for (int i = 0; i < AMOUNT_OF_PHILOSOPHERS; ++i) {
+        pthread_mutex_destroy(&waitForFork[i]);
+    }
 
     return 0;
 }
