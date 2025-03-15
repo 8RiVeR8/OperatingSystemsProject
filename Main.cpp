@@ -2,6 +2,8 @@
 #include <pthread.h>
 #include <iostream>
 #include <thread>
+#include <algorithm>
+#include <vector>
 
 pthread_mutex_t* waitForFork;
 int amountOfPhilosophers;
@@ -25,18 +27,21 @@ void *philosopher(void *arg) {
 
         pthread_mutex_lock(&waitForFork[secondFork]);
         pthread_mutex_lock(&waitForThinking);
-        std::cout << "Filozof " << id << " wzial widelec " << secondFork << " i zaczal jesc" << "\n";
+        std::cout << "Filozof " << id << " wzial widelec " << secondFork;
+        std::cout << " i zaczal jesc" << "\n";
         pthread_mutex_unlock(&waitForThinking);
         std::this_thread::sleep_for(std::chrono::seconds(16));
 
         pthread_mutex_unlock(&waitForFork[secondFork]);
         pthread_mutex_lock(&waitForThinking);
-        std::cout << "Filozof " << id << " odlozyl widelec " << secondFork << "\n";
+        std::cout << "Filozof " << id << " odlozyl widelec ";
+        std::cout << secondFork << "\n";
         pthread_mutex_unlock(&waitForThinking);
 
         pthread_mutex_unlock(&waitForFork[firstFork]);
         pthread_mutex_lock(&waitForThinking);
-        std::cout << "Filozof " << id << " odlozyl widelec " << firstFork << " i ponownie mysli" <<"\n";
+        std::cout << "Filozof " << id << " odlozyl widelec " << firstFork;
+        std::cout << " i ponownie mysli" <<"\n";
         pthread_mutex_unlock(&waitForThinking);
     }
 }
@@ -45,8 +50,8 @@ int main(int argc, const char * argv[]) {
     amountOfPhilosophers = std::stoi(argv[1]);
     std::cout << "Liczba filozofów: " << amountOfPhilosophers << std::endl;
 
-    pthread_t philosophersThread[amountOfPhilosophers];
-    int ids[amountOfPhilosophers];
+    std::vector<pthread_t> philosophersThread(amountOfPhilosophers);
+    std::vector<int> ids(amountOfPhilosophers);
     waitForFork = new pthread_mutex_t[amountOfPhilosophers];
 
     for (int i = 0; i < amountOfPhilosophers; ++i) {

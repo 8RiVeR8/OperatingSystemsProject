@@ -43,18 +43,18 @@ informacji, którzy filozofowie myślą, które widelce są pobierane oraz któr
 ## Wątki
 -  ***philosophersThread* - reprezentuje każdego z filozofów w problemie "jedzących filozofów".**
 
-**Każdy filozof to osobny wątek wykonujący funkcję *philosopher*.
+Każdy filozof to osobny wątek wykonujący funkcję *philosopher*.
 Wątki te są tworzone dynamicznie, a ich działanie polega na myśleniu, 
 podnoszeniu widelców, jedzeniu i ponownym myśleniu w nieskończonej pętli. Dzięki mutexowi *pthread_mutex_t*
 blokujemy i odblokowujemy dostęp do zasobów (widelców), aby zapobiec konfliktom i jednoczesnemu dostępowi.
-Ich hierarchiczne blokowanie zapobiega deadlockom** 
+Ich hierarchiczne blokowanie zapobiega deadlockom*
 
 ## Sekcje krytyczne
 ### W programie występują dwie sekcje krytyczne w fukncji *philosopher*
--  ***waitForFork[]* - dwaj filozofowie mogą podnieść ten sam widelec w tym samym czasie..**
--  ***std::cout* - wątki mogą mieszać komunikaty na ekranie..**
+-  *waitForFork[]* - dwaj filozofowie mogą podnieść ten sam widelec w tym samym czasie.
+-  *std::cout* - wątki mogą mieszać komunikaty na ekranie.
 ### Rozwiązanie:
-- **W przypadku tablicy *waitForFork[]* użyto *pthread_mutex_lock()* i *pthread_mutex_unlock()* dla każdego widelca. </br>
-co pozwala na zablokowanie i odblokowanie mutexu a tym samym uniknięcie jednoczesnego dostępu do zasobów.** 
-- **Dla *std::cout* sytuacja wygląda podobnie jak w przypadku widelcy. Wykorzystujemy dodatkowy mutex dla strumienia </br> 
-wyjścia co pozwala uniknąć nakładania się tekstów.**
+- W przypadku tablicy *waitForFork[]* użyto *pthread_mutex_lock()* i *pthread_mutex_unlock()* dla każdego widelca.
+co pozwala na zablokowanie i odblokowanie mutexu a tym samym uniknięcie jednoczesnego dostępu do zasobów.
+- Dla *std::cout* sytuacja wygląda podobnie jak w przypadku widelcy. Wykorzystujemy dodatkowy mutex dla strumienia
+wyjścia co pozwala uniknąć nakładania się tekstów.
