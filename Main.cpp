@@ -5,6 +5,7 @@
 
 pthread_mutex_t* waitForFork;
 int amountOfPhilosophers;
+pthread_mutex_t waitForThinking = PTHREAD_MUTEX_INITIALIZER;
 
 void *philosopher(void *arg) {
     int id = *reinterpret_cast<int*>(arg);
@@ -12,20 +13,31 @@ void *philosopher(void *arg) {
     int secondFork = std::max(id, (id + 1) % amountOfPhilosophers);
 
     while (true) {
+        pthread_mutex_lock(&waitForThinking);
         std::cout << "Filozof numer: " << id << " myśli\n";
+        pthread_mutex_unlock(&waitForThinking);
 
         std::this_thread::sleep_for(std::chrono::seconds(8));
-
         pthread_mutex_lock(&waitForFork[firstFork]);
+        pthread_mutex_lock(&waitForThinking);
         std::cout << "Filozof " << id << " wzial widelec " << firstFork << "\n";
+        pthread_mutex_unlock(&waitForThinking);
+
         pthread_mutex_lock(&waitForFork[secondFork]);
+        pthread_mutex_lock(&waitForThinking);
         std::cout << "Filozof " << id << " wzial widelec " << secondFork << " i zaczal jesc" << "\n";
+        pthread_mutex_unlock(&waitForThinking);
         std::this_thread::sleep_for(std::chrono::seconds(16));
 
         pthread_mutex_unlock(&waitForFork[secondFork]);
+        pthread_mutex_lock(&waitForThinking);
         std::cout << "Filozof " << id << " odlozyl widelec " << secondFork << "\n";
+        pthread_mutex_unlock(&waitForThinking);
+
         pthread_mutex_unlock(&waitForFork[firstFork]);
+        pthread_mutex_lock(&waitForThinking);
         std::cout << "Filozof " << id << " odlozyl widelec " << firstFork << " i ponownie mysli" <<"\n";
+        pthread_mutex_unlock(&waitForThinking);
     }
 }
 
