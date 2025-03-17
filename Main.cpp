@@ -1,5 +1,6 @@
 // Copyright 2025 Maks
 #include <pthread.h>
+#include <string>
 #include <iostream>
 #include <thread>
 #include <algorithm>
@@ -7,7 +8,18 @@
 
 pthread_mutex_t* waitForFork;
 int amountOfPhilosophers;
-pthread_mutex_t waitForThinking = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t printMutex = PTHREAD_MUTEX_INITIALIZER;
+std::vector<std::string> states;
+
+void printStates() {
+    pthread_mutex_lock(&printMutex);
+    for (int i = 0; i < amountOfPhilosophers; i++) {
+        std::cout << "Filozof " << i << " " << states[i] << "\n";
+    }
+    std::cout << "\n\n";
+    pthread_mutex_unlock(&printMutex);
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+}
 
 void *philosopher(void *arg) {
     int id = *reinterpret_cast<int*>(arg);
@@ -15,34 +27,18 @@ void *philosopher(void *arg) {
     int secondFork = std::max(id, (id + 1) % amountOfPhilosophers);
 
     while (true) {
-        pthread_mutex_lock(&waitForThinking);
-        std::cout << "Filozof numer: " << id << " myśli\n";
-        pthread_mutex_unlock(&waitForThinking);
+        states[id] = "mysli";
+        std::this_thread::sleep_for(std::chrono::seconds(4));
 
-        std::this_thread::sleep_for(std::chrono::seconds(8));
         pthread_mutex_lock(&waitForFork[firstFork]);
-        pthread_mutex_lock(&waitForThinking);
-        std::cout << "Filozof " << id << " wzial widelec " << firstFork << "\n";
-        pthread_mutex_unlock(&waitForThinking);
-
         pthread_mutex_lock(&waitForFork[secondFork]);
-        pthread_mutex_lock(&waitForThinking);
-        std::cout << "Filozof " << id << " wzial widelec " << secondFork;
-        std::cout << " i zaczal jesc" << "\n";
-        pthread_mutex_unlock(&waitForThinking);
-        std::this_thread::sleep_for(std::chrono::seconds(16));
+
+        states[id] = "je";
+        printStates();
+        std::this_thread::sleep_for(std::chrono::seconds(4));
 
         pthread_mutex_unlock(&waitForFork[secondFork]);
-        pthread_mutex_lock(&waitForThinking);
-        std::cout << "Filozof " << id << " odlozyl widelec ";
-        std::cout << secondFork << "\n";
-        pthread_mutex_unlock(&waitForThinking);
-
         pthread_mutex_unlock(&waitForFork[firstFork]);
-        pthread_mutex_lock(&waitForThinking);
-        std::cout << "Filozof " << id << " odlozyl widelec " << firstFork;
-        std::cout << " i ponownie mysli" <<"\n";
-        pthread_mutex_unlock(&waitForThinking);
     }
 }
 
@@ -53,6 +49,8 @@ int main(int argc, const char * argv[]) {
     std::vector<pthread_t> philosophersThread(amountOfPhilosophers);
     std::vector<int> ids(amountOfPhilosophers);
     waitForFork = new pthread_mutex_t[amountOfPhilosophers];
+    states.resize(amountOfPhilosophers, "mysli");
+    printStates();
 
     for (int i = 0; i < amountOfPhilosophers; ++i) {
         pthread_mutex_init(&waitForFork[i], nullptr);
